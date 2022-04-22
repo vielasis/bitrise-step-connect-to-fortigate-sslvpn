@@ -30,5 +30,4 @@ if [ ! -z "$ip_routes" ]; then
 fi
 
 echo "Appending entries to hosts file..."
-echo -e "\n$ip_hosts" >> /etc/hosts
-cat /etc/hosts
+echo -e "\n$ip_hosts" | sudo tee -a /etc/hosts
