@@ -18,7 +18,7 @@ source_code_url: https://github.com/vielasis/bitrise-step-connect-to-fortigate-s
 support_url: https://github.com/vielasis/bitrise-step-connect-to-fortigate-sslvpn/issues
 host_os_tags:
   - osx-10.10
-  - ubuntu-16.04
+  - ubuntu-20.04
 
 # If this step should be available only for certain project types
 # just uncomment this `project_type_tags` section and include all the
@@ -51,11 +51,9 @@ run_if: ""
 
 deps:
   brew:
-  - name: git
-  - name: wget
+  - name: openfortivpn
   apt_get:
-  - name: git
-  - name: wget
+  - name: openfortivpn
 
 
 toolkit:
@@ -64,24 +62,52 @@ toolkit:
 
 
 inputs:
-  - example_step_input: Default Value - you can leave this empty if you want to
+  - ftg_host:
     opts:
-      title: "Example Step Input"
-      summary: Summary. No more than 2-3 sentences.
-      description: |
-        Description of this input.
-
-        Can be Markdown formatted text.
+      title: Remote Gateway
+      summary: Can be an IPv4 address on a FQDN
       is_expand: true
       is_required: true
-      value_options: []
-
-outputs:
-  - EXAMPLE_STEP_OUTPUT:
+  - ftg_port: 443
     opts:
-      title: "Example Step Output"
-      summary: Summary. No more than 2-3 sentences.
-      description: |
-        Description of this output.
-
-        Can be Markdown formatted text.
+      title: Remote Gateway Port
+      summary: "VPN Port (default: 443)"
+      is_expand: true
+      is_required: true
+  - ftg_username:
+    opts:
+      title: Username
+      summary: Fortigate username
+      is_expand: true
+      is_required: true
+  - ftg_password:
+    opts:
+      title: Password
+      summary: Fortigate password
+      is_expand: true
+      is_required: true
+      is_sensitive: true
+  - ftg_trusted_certs:
+    opts:
+      title: Trusted certs
+      summary: Passed to --trusted-cert option. Split cert entries with a newline `\n.` *DO NOT* end with newline
+      is_expand: true
+      is_required: false
+  - ftg_logfile: $BITRISE_DEPLOY_DIR/fortigate.log
+    opts:
+      title: Log file path
+      summary: Defaults to `$BITRISE_DEPLOY_DIR/fortigate.log`
+      is_expand: true
+      is_required: true
+  - ip_hosts:
+    opts:
+      title: /etc/hosts
+      summary: Lits of entries to be appended to /etc/hosts. Separate entries with a newline `\n`
+      is_expand: true
+      is_required: false
+  - ip_routes:
+    opts:
+      title: IP Addresses to route
+      summary: List of IP Addresses to route to the ppp gateway. Separate entries with a newline `\n.` *DO NOT* end with newline
+      is_expand: true
+      is_required: false
